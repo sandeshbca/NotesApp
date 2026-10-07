@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} · Notelet{% endblock %}
+{% block body_class %}editor-page{% endblock %}
+{% block content %}
+<header class="editor-header"><a class="brand brand-dark" href="{{ url_for('dashboard') }}"><span class="brand-mark">N</span><span>notelet</span></a><a class="back-link" href="{{ url_for('dashboard') }}">← Back to notes</a></header>
+<main class="editor-wrap">
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+  <section class="editor-card">
+    <div class="editor-titlebar"><div><p class="eyebrow muted">{{ 'NEW NOTE' if not note else 'EDITING NOTE' }}</p><h1>{{ page_title }}</h1></div><span class="editor-badge">Private</span></div>
+    <form method="post" class="note-form">
+      <label class="form-label">Title<input class="title-input" type="text" name="title" placeholder="Give this thought a title…" value="{{ request.form.get('title', note.title if note else '') }}" maxlength="100" required autofocus></label>
+      <label class="form-label">Your note<textarea name="content" placeholder="Write whatever is on your mind…" rows="10">{{ request.form.get('content', note.content if note else '') }}</textarea></label>
+      <fieldset class="color-picker"><legend>Choose a color</legend><div class="swatches"><label class="swatch violet"><input type="radio" name="color" value="violet" {% if request.form.get('color', note.color if note else 'violet') == 'violet' %}checked{% endif %}><span></span></label><label class="swatch coral"><input type="radio" name="color" value="coral" {% if request.form.get('color', note.color if note else '') == 'coral' %}checked{% endif %}><span></span></label><label class="swatch mint"><input type="radio" name="color" value="mint" {% if request.form.get('color', note.color if note else '') == 'mint' %}checked{% endif %}><span></span></label><label class="swatch sky"><input type="radio" name="color" value="sky" {% if request.form.get('color', note.color if note else '') == 'sky' %}checked{% endif %}><span></span></label><label class="swatch sun"><input type="radio" name="color" value="sun" {% if request.form.get('color', note.color if note else '') == 'sun' %}checked{% endif %}><span></span></label></div></fieldset>
+      <div class="editor-actions"><a class="button button-quiet" href="{{ url_for('dashboard') }}">Cancel</a><button class="button button-primary" type="submit">{{ 'Save changes' if note else 'Create note' }} <span>→</span></button></div>
+    </form>
+  </section>
+</main>
+{% endblock %}

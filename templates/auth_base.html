@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body_class %}auth-page{% endblock %}
+{% block content %}
+<main class="auth-shell">
+  <section class="auth-promo">
+    <a class="brand brand-light" href="{{ url_for('index') }}" aria-label="Notelet home"><span class="brand-mark">N</span><span>notelet</span></a>
+    <div class="promo-copy"><p class="eyebrow">YOUR CALM CORNER</p><h1>Thoughts deserve a beautiful place to land.</h1><p>Capture the little things, untangle the big ones, and keep everything that matters in one gentle space.</p></div>
+    <div class="promo-orbit" aria-hidden="true"><span class="orbit-card card-one">☼ &nbsp; A fresh idea</span><span class="orbit-card card-two">Make room to think</span><span class="orbit-dot"></span></div>
+    <p class="promo-footer">Made for your everyday thoughts.</p>
+  </section>
+  <section class="auth-panel">
+    <a class="brand brand-dark mobile-brand" href="{{ url_for('index') }}"><span class="brand-mark">N</span><span>notelet</span></a>
+    <div class="auth-card">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+      {% block auth_content %}{% endblock %}
+    </div>
+  </section>
+</main>
+{% endblock %}

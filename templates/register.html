@@ -1,0 +1,13 @@
+{% extends "auth_base.html" %}
+{% block title %}Create your account · Notelet{% endblock %}
+{% block auth_content %}
+<div class="auth-heading"><p class="eyebrow muted">START YOUR SPACE</p><h2>Make it yours.</h2><p>A calm home for your ideas is one minute away.</p></div>
+<form method="post" class="auth-form">
+  <label>Your name<input type="text" name="name" placeholder="How should we call you?" autocomplete="name" value="{{ request.form.get('name', '') }}" required autofocus></label>
+  <label>Email address<input type="email" name="email" placeholder="you@example.com" autocomplete="email" value="{{ request.form.get('email', '') }}" required></label>
+  <label>Password<span class="password-wrap"><input type="password" name="password" placeholder="At least 6 characters" autocomplete="new-password" required><button class="toggle-password" type="button" aria-label="Show password">Show</button></span></label>
+  <label>Confirm password<input type="password" name="confirm_password" placeholder="One more time" autocomplete="new-password" required></label>
+  <button class="button button-primary button-full" type="submit">Create account <span>→</span></button>
+</form>
+<p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+{% endblock %}

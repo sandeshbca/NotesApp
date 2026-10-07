@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My notes · Notelet{% endblock %}
+{% block body_class %}app-page{% endblock %}
+{% block content %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand brand-dark" href="{{ url_for('dashboard') }}"><span class="brand-mark">N</span><span>notelet</span></a>
+    <nav class="side-nav" aria-label="Main navigation"><a class="nav-item active" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span>All notes <b>{{ total_notes }}</b></a><a class="nav-item" href="{{ url_for('create_note') }}"><span class="nav-icon">＋</span>New note</a></nav>
+    <div class="sidebar-bottom"><div class="user-row"><span class="avatar">{{ current_user.name[0]|upper }}</span><span><strong>{{ current_user.name }}</strong><small>{{ current_user.email }}</small></span></div><form method="post" action="{{ url_for('logout') }}"><button class="sign-out" type="submit">↗ &nbsp; Sign out</button></form></div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar"><div><button class="menu-button" type="button" aria-label="Open menu">☰</button><span class="mobile-title">My notes</span></div><a class="button button-primary top-new" href="{{ url_for('create_note') }}"><span>＋</span> New note</a></header>
+    <div class="content-wrap">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+      <section class="dashboard-intro"><div><p class="eyebrow muted">YOUR NOTEBOOK</p><h1>Welcome, {{ current_user.name.split()[0] }}.</h1><p>Here’s a quiet corner for everything on your mind.</p></div><div class="date-chip">{{ total_notes }} {{ 'note' if total_notes == 1 else 'notes' }} saved</div></section>
+      <section class="notes-section">
+        <div class="notes-toolbar"><h2>All notes <span>{{ total_notes }}</span></h2><label class="search"><span>⌕</span><input id="note-search" type="search" placeholder="Search notes"></label></div>
+        {% if notes %}
+        <div class="notes-grid" id="notes-grid">
+          {% for note in notes %}
+          <article class="note-card note-{{ note.color }}" data-search="{{ note.title|lower }} {{ note.content|lower }}">
+            <div class="note-card-top"><span class="note-spark">✦</span><div class="note-actions"><a href="{{ url_for('edit_note', note_id=note.id) }}" aria-label="Edit {{ note.title }}">Edit</a><form method="post" action="{{ url_for('delete_note', note_id=note.id) }}" data-delete-form><button type="submit" aria-label="Delete {{ note.title }}">×</button></form></div></div>
+            <a class="note-link" href="{{ url_for('edit_note', note_id=note.id) }}"><h3>{{ note.title }}</h3><p>{{ note.content or 'No details yet — add a thought.' }}</p></a>
+            <footer><span>Updated {{ note.updated_at|friendly_date }}</span><a href="{{ url_for('edit_note', note_id=note.id) }}">Open →</a></footer>
+          </article>
+          {% endfor %}
+        </div>
+        <div class="empty-search" id="empty-search" hidden>No notes match that search.</div>
+        {% else %}
+        <section class="empty-state"><div class="empty-illustration"><span>✦</span><i></i><b></b></div><h2>Start with a small thought.</h2><p>Your notebook is ready whenever you are.</p><a class="button button-primary" href="{{ url_for('create_note') }}">Create your first note <span>→</span></a></section>
+        {% endif %}
+      </section>
+    </div>
+  </main>
+</div>
+{% endblock %}
